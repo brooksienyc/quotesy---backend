@@ -11,6 +11,9 @@ router.post('/create', controllers.createFavorite);
 router.get('/all', controllers.getAllFavorites);
 router.get('/:id', controllers.getFavoriteById);
 
+// DELETE route
+router.delete('/delete/:id', controllers.deleteFavoriteById);
+
 
 
 

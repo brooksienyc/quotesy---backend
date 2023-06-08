@@ -2,39 +2,28 @@ import Favorite from '../models/fav-model.js'
 import Quote from '../models/quote-model.js'
 
 
-// CREATE
+
+
 export const createFavorite = async (req, res) => {
   try {
-    const { quoteId } = req.body;
+    const quoteId = req.body.quoteId;
 
-    // Check if the Quote already exists
-    const existingQuote = await Quote.findById(quoteId);
-
-    let quote;
-    if (existingQuote) {
-      quote = existingQuote;
-    } else {
-      // Create a new Quote document
-      const { category, author, text } = req.body;
-      quote = new Quote({ category, author, text });
-      await quote.save();
+    // Check if the Favorite already exists
+    const existingFavorite = await Favorite.findOne({ quoteId: quoteId });
+    if (existingFavorite) {
+      return res.status(302).json({ message: "This quote already exists in Favorites." });
     }
 
     // Create a new Favorite document
-    const favorite = new Favorite({ quoteId: quote._id });
+    const favorite = new Favorite({ quoteId: quoteId });
     await favorite.save();
 
-    // Fetch the complete quote data
-    const populatedFavorite = await Favorite.findById(favorite._id).populate('quoteId', 'category author text');
-
-    res.status(200).json(populatedFavorite);
+    res.status(200).json(favorite);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
-
-
-
 
 
 
@@ -77,17 +66,20 @@ export const getAllFavorites = async (req, res) => {
 // READ BY ID
 export const getFavoriteById = async (req, res) => {
   try {
-    const favorite = await Favorite.findById(req.params.id);
-    if (!favorite) {
-      return res.status(404).json({ message: 'Favorite not found' });
-    }
-    const quote = await Quote.findById(favorite.quoteId);
+    console.log(req.params.id)
+    // const favorite = await Favorite.findById(req.params.id);
+    // if (!favorite) {
+    //   return res.status(404).json({ message: 'Favorite not found' });
+    // }
+    const quote = await Favorite.findById(req.params.id);
     if (!quote) {
       return res.status(404).json({ message: 'Quote not found' });
     }
+
+    console.log(quote._doc);
+
     const populatedFavorite = {
-      ...favorite.toObject(),
-      quoteId: quote,
+      ...quote._doc
     };
     res.json(populatedFavorite);
   } catch (error) {
@@ -99,26 +91,27 @@ export const getFavoriteById = async (req, res) => {
 
 
 // DELETE BY ID
-export const deleteFavorite = async (req, res) => {
-  try {
-    const { id } = req.params;
+export const deleteFavoriteById = async (req, res) => {
+  // try {
+    Favorite.findByIdAndRemove(req.params.id)
+  //   const id  = req.params.id;
 
-    const favorite = await Favorite.findById(id);
-    if (!favorite) {
-      return res.status(404).json({ message: 'Favorite not found' });
-    }
+  //   const favorite = await Favorite.findById(id);
+  //   if (!favorite) {
+  //     return res.status(404).json({ message: 'Favorite not found' });
+  //   }
 
-    // Retrieve the quoteId associated with the favorite
-    const quoteId = favorite.quoteId;
+  //   // Retrieve the quoteId associated with the favorite
+  //   const quoteId = favorite.quoteId;
 
-    // Remove the favorite from the favorites collection
-    await favorite.remove();
+  //   // Remove the favorite from the favorites collection
+  //   await favorite.remove();
 
-    res.status(200).json({ message: 'Favorite deleted successfully' });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
-  }
+  //   res.status(200).json({ message: 'Favorite deleted successfully' });
+  // } catch (error) {
+  //   console.log(error);
+  //   return res.status(500).json({ message: error.message });
+  // }
 };
 
 

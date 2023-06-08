@@ -41,24 +41,25 @@ export const getQuoteById = async (req, res) => {
 };
 
 // READ BY CATEGORY
-export const getQuoteByCategory = (req, res) => {
-    try {
-      const category = req.params.category;
-      const quotesCategory = quoteCategories.includes(category);
+export const getQuoteByCategory = async (req, res) => {
+  try {
+    // const { category } = req.params;
+    const quoteCategories = req.params;
 
-      if (!quotesCategory) {
-        return res.status(404).json({ message: "No quotes found for this category."})
-      }
+    // Check if the requested category exists in the quoteCategories array
+    if (!quoteCategories.includes(category)) {
+      return res.status(404).json({ message: 'No quotes found for this category.' });
+    }
 
-      const filteredQuotes = quotes.filter((quote) => {
-        return quote.category === category;
-      });
+    // Find quotes that match the requested category
+    const quotes = await Quote.find({ category });
 
-      res.status(200).json({ category, quotes: filteredQuotes })
+    res.status(200).json(quotes);
   } catch (error) {
-    return res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message });
   }
-}
+};
+
   
 
 // UPDATE

@@ -27,7 +27,6 @@
 
 
 // run node seed.js when seeding database
-import mongoose from 'mongoose'
 import db from './connection.js'
 import Quote from '../models/quote-model.js'
 // import Fav from '../models/fav-model.js'

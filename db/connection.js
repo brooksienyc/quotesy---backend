@@ -1,26 +1,10 @@
 import mongoose from "mongoose";
-import * as dotenv from 'dotenv'
 import chalk from "chalk";
+import dotenv from 'dotenv';
+dotenv.config();
 
-dotenv.config()
-// let PROD_MONGODB="mongodb+srv://cbrooksie:P8O2mqjzfhjTkgh4@cluster0.slfno6f.mongodb.net/?retryWrites=true&w=majority"
-// Get .env working later
-const MONGODB_URI = process.env.PROD_MONGODB;
 
-console.log(MONGODB_URI)
-
-// const MONGODB_URI = "mongodb://127.0.0.1:27017/Quotes"
-
-// console.log(MONGODB_URI)
-// console.log(process.env.PORT, "here")
-  // process.env.ENVIRONMENT === 'prod' ? 
-  
-//   process.env.DEV_MONGODB;
-
-// Use this MONGODB_URI for now
-// const MONGODB_URI = "mongodb+srv://cbrooksie:P8O2mqjzfhjTkgh4@cluster0.slfno6f.mongodb.net/?retryWrites=true&w=majority"
-// Uncomment to debug Mongoose queries
-// mongoose.set('debug', true)
+const MONGODB_URI = process.env.PROD_MONGODB
 
 // This is for Model.findByIdAndUpdate method, specifically the so that { new: true} is the default
 // Learn more: https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate

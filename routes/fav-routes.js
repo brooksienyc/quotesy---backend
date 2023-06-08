@@ -4,20 +4,14 @@ import * as controllers from '../controllers/fav-controller.js'
 
 const router = Router()
 
+// CREATE routes
+router.post('/create', controllers.createFavorite);
 
-// GET all quotes
-router.get('/quotes', controllers.getAllQuotes);
+// READ routes
+router.get('/all', controllers.getAllFavorites);
+router.get('/:id', controllers.getFavoriteById);
 
-// GET routes
-router.get('/quotes/:quoteId/favorites', controllers.getAllFavoritesForQuote);
 
-// POST routes
-router.post('/quotes/:quoteId/favorite', controllers.createFavorite);
 
-// PUT routes
-router.put('/favorite/:id', controllers.updateFavorite);
-
-// DELETE routes
-router.delete('/favorite/:id', controllers.deleteFavorite);
 
 export default router

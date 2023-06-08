@@ -1,17 +1,18 @@
 import db from "./db/connection.js"
-import routes from "./routes/index.js"
+// import routes from "./routes/index.js"
 import express from "express"
 import cors from "cors"
+import quoteRoutes from './routes/quote-routes.js';
+import favRoutes from './routes/fav-routes.js';
 import chalk from "chalk"
 
 const app = express()
 const PORT = process.env.PORT || 8080
 
-console.log(process.env.XRapidAPIKey);
-
 app.use(express.json())
 app.use(cors())
-app.use("/quotes", routes)
+app.use("/quotes", quoteRoutes)
+app.use("/favorites", favRoutes)
 
 db.on("connected",()=>{
     console.clear()

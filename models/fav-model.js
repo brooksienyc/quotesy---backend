@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Quote from './quote-model.js'
 
 const favoriteSchema = new mongoose.Schema({
   quoteId: {

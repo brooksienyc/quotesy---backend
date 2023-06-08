@@ -1,6 +1,21 @@
 import Quote from '../models/quote-model.js'
+import quoteCategories from '../data/categories.json' assert {type: "json"}
 
-// Get
+
+// CREATE
+export const createQuote = async (req, res) => {
+  try {
+    const quoteCreate = await Quote(req.body);
+    console.log(quoteCreate)
+    await quoteCreate.save()
+    res.status(200).json(quoteCreate);
+} catch (err) {
+    return res.status(500).json({ message: err.message });
+}
+};
+
+
+// READ
 export const getAllQuotes = async (req, res) => {
     try {
       const quotes = await Quote.find()
@@ -11,7 +26,7 @@ export const getAllQuotes = async (req, res) => {
     }
 };
 
-// Get
+// READ BY ID
 export const getQuoteById = async (req, res) => {
   try {
     const quotesId = await Quote.find({ _id: req.params.id });
@@ -25,19 +40,28 @@ export const getQuoteById = async (req, res) => {
 }
 };
 
-// Create
-export const createQuote = async (req, res) => {
-  try {
-    const quoteCreate = await Quote(req.body);
-    console.log(quoteCreate)
-    await quoteCreate.save()
-    res.status(200).json(quoteCreate);
-} catch (err) {
-    return res.status(500).json({ message: err.message });
-}
-};
+// READ BY CATEGORY
+export const getQuoteByCategory = (req, res) => {
+    try {
+      const category = req.params.category;
+      const quotesCategory = quoteCategories.includes(category);
 
-// Update 
+      if (!quotesCategory) {
+        return res.status(404).json({ message: "No quotes found for this category."})
+      }
+
+      const filteredQuotes = quotes.filter((quote) => {
+        return quote.category === category;
+      });
+
+      res.status(200).json({ category, quotes: filteredQuotes })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+  
+
+// UPDATE
 export const updateQuote = async (req, res) => {
     const quoteUpdate = req.body
     const quotesId = req.params.id
@@ -53,7 +77,7 @@ export const updateQuote = async (req, res) => {
     })
 }
 
-// Delete
+// DELETE
 export const deleteQuote = async (req, res) => {
   const quotesId = req.params.id
   Quote.findByIdAndRemove(quotesId) 
@@ -67,4 +91,3 @@ export const deleteQuote = async (req, res) => {
 
   })
 }
-

@@ -9,8 +9,10 @@ const router = Router()
 router.get('/all', quoteController.getAllQuotes);
 
 // GET ref as a key or a value
-// router.get('/quotes/:id', quoteController.getQuoteByCategory);
 router.get('/:id', quoteController.getQuoteById);
+router.get('/:category', quoteController.getQuoteByCategory);
+
+
 // // POST routes
 router.post('/create', quoteController.createQuote);
 
